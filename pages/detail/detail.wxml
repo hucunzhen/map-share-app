@@ -1,0 +1,104 @@
+<!-- pages/detail/detail.wxml -->
+<view class="container" wx:if="{{info && !loading}}">
+
+  <!-- 位置信息卡片 -->
+  <view class="info-card">
+    <view class="info-header">
+      <text class="title">{{info.title}}</text>
+    </view>
+
+    <view class="location-row" bindtap="viewOnMap">
+      <text class="icon">📍</text>
+      <text class="address">{{info.address || '未知地址'}}</text>
+      <text class="coords">{{info.latitude.toFixed(6)}}, {{info.longitude.toFixed(6)}}</text>
+    </view>
+
+    <view class="description" wx:if="{{info.description}}">
+      {{info.description}}
+    </view>
+
+    <!-- 图片展示 -->
+    <view class="images" wx:if="{{info.images && info.images.length > 0}}">
+      <image 
+        wx:for="{{info.images}}" 
+        wx:key="index"
+        src="{{item}}"
+        mode="aspectFill"
+        class="info-image"
+        bindtap="previewImage"
+        data-index="{{index}}" />
+    </view>
+
+    <!-- 底部信息 -->
+    <view class="info-footer">
+      <text class="time">发布于 {{info.createTime}}</text>
+      <view class="stats">
+        <text>👁️ {{info.viewCount || 0}}</text>
+        <text>👍 {{likeCount}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-bar">
+    <view class="action-item" bindtap="toggleLike">
+      <text class="icon">{{isLiked ? '❤️' : '🤍'}}</text>
+      <text>{{isLiked ? '已点赞' : '点赞'}}</text>
+    </view>
+    <view class="action-item" bindtap="toggleFavorite">
+      <text class="icon">⭐</text>
+      <text>收藏</text>
+    </view>
+  </view>
+
+  <!-- 导航按钮 -->
+  <view class="nav-section">
+    <button class="btn-amap" bindtap="openAmap">
+      <text class="icon">🧭</text>
+      <text>用高德地图导航</text>
+    </button>
+    <button class="btn-map" bindtap="viewOnMap">
+      <text class="icon">🗺️</text>
+      <text>在地图上查看</text>
+    </button>
+  </view>
+
+  <!-- 评论区域 -->
+  <view class="comment-section">
+    <view class="section-title">
+      <text>评论</text>
+      <text class="count">({{comments.length}})</text>
+    </view>
+
+    <!-- 评论列表 -->
+    <view class="comments-list">
+      <view wx:for="{{comments}}" wx:key="_id" class="comment-item">
+        <view class="comment-header">
+          <text class="author">{{item.authorInfo ? item.authorInfo.nickName : '匿名用户'}}</text>
+          <text class="time">{{item.createTime}}</text>
+        </view>
+        <view class="comment-content">{{item.content}}</view>
+      </view>
+
+      <view wx:if="{{comments.length === 0}}" class="empty-comments">
+        <text>还没有评论，快来抢沙发吧~</text>
+      </view>
+    </view>
+
+    <!-- 评论输入 -->
+    <view class="comment-input">
+      <input 
+        class="input" 
+        placeholder="写下你的评论..."
+        value="{{newComment}}"
+        bindinput="onCommentInput" />
+      <button class="submit-btn" bindtap="submitComment">发送</button>
+    </view>
+  </view>
+
+</view>
+
+<!-- 加载状态 -->
+<view wx:if="{{loading}}" class="loading-state">
+  <text>加载中...</text>
+</view>

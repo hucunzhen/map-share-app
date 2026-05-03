@@ -1,0 +1,105 @@
+<!-- pages/mine/mine.wxml -->
+<view class="container">
+
+  <!-- 用户信息 -->
+  <view class="user-card">
+    <view class="avatar" wx:if="{{userInfo}}">
+      <open-data type="userAvatarUrl" />
+    </view>
+    <view class="avatar default" wx:else>👤</view>
+    <view class="user-info">
+      <text class="name">{{userInfo ? userInfo.nickName : '微信用户'}}</text>
+      <text class="sub">{{myPosts.length}} 条发布</text>
+    </view>
+  </view>
+
+  <!-- 标签切换 -->
+  <view class="tab-bar">
+    <view 
+      class="tab {{activeTab === 'posts' ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="posts">
+      我的发布
+    </view>
+    <view 
+      class="tab {{activeTab === 'favorites' ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="favorites">
+      我的收藏
+    </view>
+  </view>
+
+  <!-- 我的发布列表 -->
+  <view wx:if="{{activeTab === 'posts'}}">
+    <view wx:if="{{myPosts.length > 0}}">
+      <view 
+        wx:for="{{myPosts}}" 
+        wx:key="_id"
+        class="item-card">
+        
+        <view bindtap="goDetail" data-id="{{item._id}}">
+          <view class="item-title">{{item.title}}</view>
+          <view class="item-desc" wx:if="{{item.description}}">{{item.description}}</view>
+          <view class="item-meta">
+            <text class="coords">{{item.latitude.toFixed(4)}}, {{item.longitude.toFixed(4)}}</text>
+            <text class="time">{{item.createTime}}</text>
+          </view>
+        </view>
+
+        <view class="item-actions">
+          <view class="action-btn" bindtap="goNavigate" data-lat="{{item.latitude}}" data-lon="{{item.longitude}}" data-name="{{item.title}}">
+            🧭 导航
+          </view>
+          <view class="action-btn delete" bindtap="deletePost" data-id="{{item._id}}">
+            🗑️ 删除
+          </view>
+        </view>
+
+      </view>
+    </view>
+    <view wx:else class="empty-state">
+      <text>还没有发布</text>
+      <text>去发布第一条位置信息吧</text>
+    </view>
+  </view>
+
+  <!-- 我的收藏列表 -->
+  <view wx:if="{{activeTab === 'favorites'}}">
+    <view wx:if="{{myFavorites.length > 0}}">
+      <view 
+        wx:for="{{myFavorites}}" 
+        wx:key="_id"
+        class="item-card">
+        
+        <view bindtap="goDetail" data-id="{{item._id}}">
+          <view class="item-title">{{item.title}}</view>
+          <view class="item-desc" wx:if="{{item.description}}">{{item.description}}</view>
+          <view class="item-meta">
+            <text class="coords">{{item.latitude.toFixed(4)}}, {{item.longitude.toFixed(4)}}</text>
+            <text class="time">{{item.createTime}}</text>
+          </view>
+        </view>
+
+        <view class="item-actions">
+          <view class="action-btn" bindtap="goNavigate" data-lat="{{item.latitude}}" data-lon="{{item.longitude}}" data-name="{{item.title}}">
+            🧭 导航
+          </view>
+          <view class="action-btn delete" bindtap="removeFavorite" data-id="{{item._id}}">
+            ⭐ 取消收藏
+          </view>
+        </view>
+
+      </view>
+    </view>
+    <view wx:else class="empty-state">
+      <text>还没有收藏</text>
+      <text>收藏感兴趣的位置信息</text>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+
+</view>

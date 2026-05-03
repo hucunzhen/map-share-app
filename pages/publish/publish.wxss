@@ -1,0 +1,198 @@
+/* pages/publish/publish.wxss */
+
+.section {
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 24rpx;
+}
+
+.section-title .icon {
+  margin-right: 12rpx;
+  font-size: 32rpx;
+}
+
+.section-title .sub {
+  font-size: 24rpx;
+  color: #999999;
+  font-weight: 400;
+  margin-left: 12rpx;
+}
+
+/* 位置框 */
+.location-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+  border: 2rpx dashed #e0e0e0;
+  border-radius: 12rpx;
+  padding: 28rpx 24rpx;
+}
+
+.location-loading {
+  color: #3b82f6;
+  font-size: 28rpx;
+}
+
+.location-info {
+  flex: 1;
+}
+
+.location-info .address {
+  display: block;
+  font-size: 28rpx;
+  color: #333333;
+  margin-bottom: 8rpx;
+}
+
+.location-info .coords {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.location-empty {
+  display: flex;
+  flex-direction: column;
+  color: #3b82f6;
+  font-size: 28rpx;
+}
+
+.location-empty .hint {
+  font-size: 24rpx;
+  color: #999999;
+  margin-top: 4rpx;
+}
+
+.arrow {
+  font-size: 40rpx;
+  color: #cccccc;
+  margin-left: 16rpx;
+}
+
+/* 输入框 */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.input-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 28rpx;
+  color: #666666;
+  margin-bottom: 12rpx;
+}
+
+.input {
+  background: #f8fafc;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  font-size: 30rpx;
+  border: 2rpx solid #f0f0f0;
+}
+
+.textarea {
+  background: #f8fafc;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  font-size: 30rpx;
+  border: 2rpx solid #f0f0f0;
+  min-height: 160rpx;
+  line-height: 1.6;
+}
+
+/* 图片网格 */
+.images-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.image-item {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 12rpx;
+  overflow: hidden;
+  position: relative;
+}
+
+.image-item image {
+  width: 100%;
+  height: 100%;
+}
+
+.image-delete {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  width: 40rpx;
+  height: 40rpx;
+  background: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+}
+
+.add-image {
+  width: 200rpx;
+  height: 200rpx;
+  background: #f8fafc;
+  border: 2rpx dashed #e0e0e0;
+  border-radius: 12rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-image .plus {
+  font-size: 60rpx;
+  color: #cccccc;
+  line-height: 1;
+}
+
+.add-image .text {
+  font-size: 24rpx;
+  color: #999999;
+  margin-top: 8rpx;
+}
+
+/* 发布按钮 */
+.btn-area {
+  padding: 24rpx 0;
+}
+
+.btn-publish {
+  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+  color: #ffffff;
+  border: none;
+  border-radius: 12rpx;
+  font-size: 34rpx;
+  padding: 28rpx 0;
+  box-shadow: 0 4rpx 16rpx rgba(59, 130, 246, 0.3);
+}
+
+.btn-publish.loading {
+  opacity: 0.6;
+}
+
+.btn-publish::after {
+  border: none;
+}

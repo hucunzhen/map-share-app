@@ -1,0 +1,142 @@
+/* pages/home/home.wxss */
+
+.view-switch {
+  display: flex;
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 6rpx;
+  margin-bottom: 24rpx;
+}
+
+.switch-btn {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  font-size: 28rpx;
+  color: #666666;
+  border-radius: 20rpx;
+  transition: all 0.2s;
+}
+
+.switch-btn.active {
+  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* 列表卡片 */
+.info-card {
+  position: relative;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.card-header .title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  flex: 1;
+}
+
+.description {
+  font-size: 28rpx;
+  color: #666666;
+  line-height: 1.6;
+  margin-bottom: 20rpx;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 24rpx;
+  color: #999999;
+  margin-bottom: 16rpx;
+}
+
+.location {
+  display: flex;
+  align-items: center;
+}
+
+.location .icon {
+  margin-right: 4rpx;
+}
+
+.card-actions {
+  display: flex;
+  border-top: 1rpx solid #f0f0f0;
+  padding-top: 20rpx;
+  margin-top: 8rpx;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  padding: 8rpx 20rpx;
+  background: #f0f7ff;
+  border-radius: 20rpx;
+  font-size: 26rpx;
+  color: #3b82f6;
+}
+
+.action-btn .icon {
+  font-size: 24rpx;
+}
+
+/* 地图视图 */
+.map-container {
+  position: relative;
+  height: calc(100vh - 200rpx);
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+  border-radius: 16rpx;
+}
+
+.map-tip {
+  position: absolute;
+  bottom: 32rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.6);
+  color: #ffffff;
+  font-size: 24rpx;
+  padding: 12rpx 32rpx;
+  border-radius: 24rpx;
+}
+
+/* 加载状态 */
+.loading {
+  text-align: center;
+  padding: 32rpx;
+  color: #999999;
+  font-size: 26rpx;
+}
+
+.no-more {
+  text-align: center;
+  padding: 32rpx;
+  color: #cccccc;
+  font-size: 24rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+}

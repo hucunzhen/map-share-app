@@ -1,0 +1,92 @@
+<!-- pages/home/home.wxml -->
+<view class="container">
+
+  <!-- 视图切换 -->
+  <view class="view-switch">
+    <view 
+      class="switch-btn {{viewMode === 'list' ? 'active' : ''}}" 
+      bindtap="switchView" 
+      data-mode="list">
+      列表
+    </view>
+    <view 
+      class="switch-btn {{viewMode === 'map' ? 'active' : ''}}" 
+      bindtap="switchView" 
+      data-mode="map">
+      地图
+    </view>
+  </view>
+
+  <!-- 列表视图 -->
+  <view wx:if="{{viewMode === 'list'}}">
+    <view wx:if="{{listData.length > 0}}">
+      <view 
+        wx:for="{{listData}}" 
+        wx:key="_id"
+        class="card info-card"
+        bindtap="goDetail"
+        data-id="{{item._id}}">
+        
+        <view class="card-header">
+          <text class="title">{{item.title}}</text>
+          <text class="tag" wx:if="{{item.images && item.images.length > 0}}">有图</text>
+        </view>
+        
+        <view class="description" wx:if="{{item.description}}">
+          {{item.description}}
+        </view>
+        
+        <view class="card-footer">
+          <view class="location">
+            <text class="icon">📍</text>
+            <text class="text">{{item.latitude.toFixed(4)}}, {{item.longitude.toFixed(4)}}</text>
+          </view>
+          <text class="time">{{item.createTime}}</text>
+        </view>
+
+        <!-- 底部按钮 -->
+        <view class="card-actions">
+          <view class="action-btn" catchtap="goNavigate" data-lat="{{item.latitude}}" data-lon="{{item.longitude}}" data-name="{{item.title}}">
+            <text class="icon">🧭</text>
+            <text>导航</text>
+          </view>
+        </view>
+
+      </view>
+
+      <!-- 加载更多 -->
+      <view class="loading" wx:if="{{loading}}">
+        <text>加载中...</text>
+      </view>
+      <view class="no-more" wx:if="{{!hasMore && listData.length > 0}}">
+        <text>— 没有更多了 —</text>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:else class="empty-state">
+      <text>还没有位置信息</text>
+      <text>快去发布第一条吧</text>
+    </view>
+  </view>
+
+  <!-- 地图视图 -->
+  <view wx:if="{{viewMode === 'map'}}" class="map-container">
+    <map
+      id="map"
+      class="map"
+      latitude="{{latitude}}"
+      longitude="{{longitude}}"
+      scale="{{scale}}"
+      markers="{{markers}}"
+      show-location
+      bindmarkertap="onMarkerTap">
+    </map>
+    
+    <!-- 地图底部提示 -->
+    <view class="map-tip">
+      <text>点击标记查看详情并导航</text>
+    </view>
+  </view>
+
+</view>
