@@ -1,5 +1,6 @@
 {
   "miniprogramRoot": "./",
+  "lazyCodeLoading": "requiredComponents",
   "setting": {
     "urlCheck": true,
     "es6": true,
@@ -42,7 +43,7 @@
     }
   },
   "compileType": "miniprogram",
-  "libVersion": "3.4.4",
+  "libVersion": "3.15.2",
   "cloudfunctionRoot": "cloudfunctions/",
   "appid": "wx959818ad31bb1801",
   "projectname": "map-share-app",

@@ -12,7 +12,8 @@ Page({
     likeCount: 0,
     comments: [],
     newComment: '',
-    userInfo: null
+    userInfo: null,
+    currentUser: ''
   },
 
   onLoad(options) {
@@ -54,7 +55,8 @@ Page({
         this.setData({
           info: info,
           likeCount: info.likeCount || 0,
-          loading: false
+          loading: false,
+          currentUser: app.globalData.openid || ''
         })
 
         // 检查是否已收藏
@@ -137,6 +139,26 @@ Page({
         this.setData({ isLiked: true, likeCount: this.data.likeCount + 1 })
       })
     }
+  },
+
+  // 联系发布者
+  contactAuthor() {
+    const openid = app.globalData.openid
+    if (!openid) {
+      wx.showToast({ title: '请先登录', icon: 'none' })
+      return
+    }
+
+    const author = this.data.info.author
+    if (author === openid) {
+      wx.showToast({ title: '这是你自己发布的', icon: 'none' })
+      return
+    }
+
+    const authorName = this.data.info.authorInfo ? this.data.info.authorInfo.nickName : '发布者'
+    wx.navigateTo({
+      url: `/pages/chat/chat?type=private&targetUser=${author}&chatName=${encodeURIComponent(authorName)}&infoId=${this.data.id}`
+    })
   },
 
   // 跳转高德地图导航

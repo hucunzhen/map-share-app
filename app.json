@@ -3,7 +3,9 @@
     "pages/home/home",
     "pages/publish/publish",
     "pages/detail/detail",
-    "pages/mine/mine"
+    "pages/mine/mine",
+    "pages/chatlist/chatlist",
+    "pages/chat/chat"
   ],
   "window": {
     "backgroundTextStyle": "light",

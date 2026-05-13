@@ -1,0 +1,53 @@
+<!-- pages/chatlist/chatlist.wxml -->
+<view class="container">
+
+  <!-- 公共聊天室入口 -->
+  <view class="public-chat-entry" bindtap="goPublicChat">
+    <view class="public-icon">🌐</view>
+    <view class="public-info">
+      <text class="public-name">公共聊天室</text>
+      <text class="public-desc">所有人都在这里聊天</text>
+    </view>
+    <text class="arrow">›</text>
+  </view>
+
+  <!-- 会话列表 -->
+  <view class="section-title" wx:if="{{conversations.length > 0}}">
+    <text>私聊消息</text>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+
+  <view wx:elif="{{conversations.length > 0}}">
+    <view
+      wx:for="{{conversations}}"
+      wx:key="_id"
+      class="chat-item"
+      bindtap="goChat"
+      data-conversationkey="{{item.conversationKey}}"
+      data-displayname="{{item.displayName}}">
+
+      <view class="chat-avatar">
+        <image wx:if="{{item.displayAvatar}}" class="avatar-img" src="{{item.displayAvatar}}" mode="aspectFill" />
+        <view wx:else class="avatar-default">👤</view>
+      </view>
+
+      <view class="chat-info">
+        <view class="chat-top">
+          <text class="chat-name">{{item.displayName}}</text>
+          <text class="chat-time">{{item.lastTimeStr}}</text>
+        </view>
+        <text class="chat-last-msg">{{item.lastMessage || '暂无消息'}}</text>
+      </view>
+
+    </view>
+  </view>
+
+  <view wx:else class="empty-state">
+    <text>还没有聊天记录</text>
+    <text class="hint">在位置详情页可以联系发布者</text>
+  </view>
+
+</view>

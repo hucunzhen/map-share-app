@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "location-card": "/components/location-card/location-card"
+  },
+  "navigationBarTitleText": "地图信息共享"
+}

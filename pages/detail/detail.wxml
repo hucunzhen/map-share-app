@@ -39,6 +39,8 @@
     </view>
   </view>
 
+
+
   <!-- 操作按钮 -->
   <view class="action-bar">
     <view class="action-item" bindtap="toggleLike">
@@ -48,6 +50,10 @@
     <view class="action-item" bindtap="toggleFavorite">
       <text class="icon">⭐</text>
       <text>收藏</text>
+    </view>
+    <view class="action-item" bindtap="contactAuthor" wx:if="{{info.author && info.author !== currentUser}}">
+      <text class="icon">💬</text>
+      <text>联系发布者</text>
     </view>
   </view>
 

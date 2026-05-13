@@ -55,12 +55,29 @@
     </view>
   </view>
 
-  <!-- 图片上传 -->
+  <!-- 图片/视频上传 -->
   <view class="section">
     <view class="section-title">
       <text class="icon">🖼️</text>
-      <text>添加图片</text>
-      <text class="sub">（选填，最多9张）</text>
+      <text>添加图片/视频</text>
+      <text class="sub">（选填，最多9张图片或3个视频）</text>
+    </view>
+
+    <!-- 视频列表 -->
+    <view wx:if="{{videos.length > 0}}" class="videos-grid">
+      <view 
+        wx:for="{{videos}}" 
+        wx:key="index"
+        class="video-item">
+        <video 
+          src="{{item.tempFilePath}}" 
+          class="video-thumb" 
+          show-center-play-btn
+          show-play-btn
+          enable-rotate-gesture />
+        <view class="video-delete" bindtap="deleteVideo" data-index="{{index}}">×</view>
+        <view class="video-duration">{{item.duration}}</view>
+      </view>
     </view>
 
     <view class="images-grid">
@@ -68,16 +85,32 @@
         wx:for="{{images}}" 
         wx:key="index"
         class="image-item">
-        <image src="{{item.tempFilePath}}" mode="aspectFill" />
+        <image src="{{item.tempFilePath}}" mode="aspectFill" bindtap="previewImage" data-index="{{index}}" />
         <view class="image-delete" bindtap="deleteImage" data-index="{{index}}">×</view>
       </view>
 
       <view 
-        wx:if="{{images.length < maxImages}}" 
+        wx:if="{{images.length < maxImages && videos.length < maxVideos}}" 
+        class="add-image camera-btn" 
+        bindtap="takePhoto">
+        <text class="icon">📷</text>
+        <text class="text">拍照</text>
+      </view>
+
+      <view 
+        wx:if="{{images.length < maxImages && videos.length < maxVideos}}" 
         class="add-image" 
         bindtap="chooseImages">
         <text class="plus">+</text>
-        <text class="text">添加图片</text>
+        <text class="text">相册</text>
+      </view>
+
+      <view 
+        wx:if="{{videos.length < maxVideos}}" 
+        class="add-image video-btn" 
+        bindtap="takeVideo">
+        <text class="icon">🎬</text>
+        <text class="text">录像</text>
       </view>
     </view>
   </view>

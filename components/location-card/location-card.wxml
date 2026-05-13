@@ -1,0 +1,6 @@
+<!-- components/location-card/location-card.wxml -->
+<view class="location-card" bindtap="onTap">
+  <view class="title">{{title}}</view>
+  <view class="address" wx:if="{{address}}">{{address}}</view>
+  <view class="distance" wx:if="{{distance}}">{{distance}}</view>
+</view>

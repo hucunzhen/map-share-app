@@ -1,0 +1,89 @@
+<!-- pages/chat/chat.wxml -->
+<view class="container">
+
+  <!-- 关联位置提示 -->
+  <view class="location-hint" wx:if="{{infoId}}">
+    <text>📍 关于此位置的对话</text>
+  </view>
+
+  <!-- 消息列表 -->
+  <scroll-view
+    class="msg-list"
+    scroll-y
+    scroll-into-view="{{scrollToId}}"
+    enhanced
+    show-scrollbar="{{false}}">
+
+    <!-- 上拉加载更多 -->
+    <view class="load-more" wx:if="{{hasMore}}" bindtap="loadMore">
+      <text>加载更早消息</text>
+    </view>
+
+    <view wx:if="{{loading && messages.length === 0}}" class="loading-state">
+      <text>加载中...</text>
+    </view>
+
+    <!-- 消息项 -->
+    <view
+      wx:for="{{messages}}"
+      wx:key="_id"
+      class="msg-item {{item.isMine ? 'mine' : 'other'}}">
+
+      <!-- 对方头像 -->
+      <view class="msg-avatar" wx:if="{{!item.isMine}}">
+        <image
+          wx:if="{{item.senderInfo && item.senderInfo.avatarUrl}}"
+          class="avatar-img"
+          src="{{item.senderInfo.avatarUrl}}"
+          mode="aspectFill" />
+        <view wx:else class="avatar-default">👤</view>
+      </view>
+
+      <!-- 消息气泡 -->
+      <view class="msg-bubble-wrap">
+        <text class="msg-sender" wx:if="{{!item.isMine && chatType === 'public'}}">
+          {{item.senderInfo.nickName || '匿名'}}
+        </text>
+        <view class="msg-bubble">
+          <text class="msg-text">{{item.content}}</text>
+        </view>
+        <text class="msg-time">{{item.timeStr}}</text>
+      </view>
+
+      <!-- 自己头像 -->
+      <view class="msg-avatar" wx:if="{{item.isMine}}">
+        <image
+          wx:if="{{item.senderInfo && item.senderInfo.avatarUrl}}"
+          class="avatar-img"
+          src="{{item.senderInfo.avatarUrl}}"
+          mode="aspectFill" />
+        <view wx:else class="avatar-default me">🟢</view>
+      </view>
+
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{!loading && messages.length === 0}}" class="empty-state">
+      <text>还没有消息</text>
+      <text class="hint">发送第一条消息吧</text>
+    </view>
+
+  </scroll-view>
+
+  <!-- 输入栏 -->
+  <view class="input-bar">
+    <input
+      class="msg-input"
+      placeholder="输入消息..."
+      value="{{inputContent}}"
+      bindinput="onInput"
+      confirm-type="send"
+      bindconfirm="sendMessage" />
+    <view
+      class="send-btn {{inputContent.trim() ? 'active' : ''}}"
+      bindtap="sendMessage">
+      发送
+    </view>
+  </view>
+
+</view>

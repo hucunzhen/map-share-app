@@ -1,34 +1,127 @@
 // pages/mine/mine.js
-// 我的页面 - 查看发布记录 + 收藏
+// 我的页面 - 登录 + 查看发布记录 + 收藏
 
 const app = getApp()
 
 Page({
   data: {
+    isLoggedIn: false,
     userInfo: null,
     myPosts: [],
     myFavorites: [],
     activeTab: 'posts',
-    loading: false
+    loading: false,
+    // 登录表单数据
+    tempAvatarUrl: '',
+    tempNickName: ''
   },
 
   onLoad() {
-    // 获取用户信息
-    app.getUserInfo(info => {
-      this.setData({ userInfo: info })
-    })
-
-    // 加载我的发布
-    this.loadMyPosts()
+    this.checkLoginStatus()
   },
 
   onShow() {
-    // 刷新数据
-    if (this.data.activeTab === 'posts') {
-      this.loadMyPosts()
-    } else {
-      this.loadMyFavorites()
+    this.checkLoginStatus()
+    if (this.data.isLoggedIn) {
+      if (this.data.activeTab === 'posts') {
+        this.loadMyPosts()
+      } else {
+        this.loadMyFavorites()
+      }
     }
+  },
+
+  // 检查登录状态
+  checkLoginStatus() {
+    const isLoggedIn = app.globalData.isLoggedIn
+    const userInfo = app.globalData.userInfo
+    this.setData({ isLoggedIn, userInfo })
+
+    // 如果 openid 还没加载完，延迟再检查
+    if (!isLoggedIn && !app.globalData.openid) {
+      setTimeout(() => this.checkLoginStatus(), 500)
+    }
+  },
+
+  // 选择头像（button open-type="chooseAvatar" 回调）
+  onChooseAvatar(e) {
+    const { avatarUrl } = e.detail
+    this.setData({ tempAvatarUrl: avatarUrl })
+  },
+
+  // 输入昵称（input type="nickname" 回调）
+  onNicknameInput(e) {
+    this.setData({ tempNickName: e.detail.value })
+  },
+
+  // 点击登录
+  onLogin() {
+    const { tempAvatarUrl, tempNickName } = this.data
+    if (!tempNickName || !tempNickName.trim()) {
+      wx.showToast({ title: '请输入昵称', icon: 'none' })
+      return
+    }
+
+    wx.showLoading({ title: '登录中...' })
+
+    // 有新头像则上传到云存储
+    if (tempAvatarUrl && (tempAvatarUrl.startsWith('http://tmp') || tempAvatarUrl.startsWith('wxfile://'))) {
+      const cloudPath = `avatars/${app.globalData.openid}_${Date.now()}.png`
+      wx.cloud.uploadFile({
+        cloudPath,
+        filePath: tempAvatarUrl,
+        success: uploadRes => {
+          this.saveUserInfo(tempNickName.trim(), uploadRes.fileID)
+        },
+        fail: () => {
+          // 上传失败用临时路径
+          this.saveUserInfo(tempNickName.trim(), tempAvatarUrl)
+        }
+      })
+    } else {
+      this.saveUserInfo(tempNickName.trim(), tempAvatarUrl || '')
+    }
+  },
+
+  // 保存用户信息
+  saveUserInfo(nickName, avatarUrl) {
+    app.login({ nickName, avatarUrl }, success => {
+      wx.hideLoading()
+      if (success) {
+        this.setData({
+          isLoggedIn: true,
+          userInfo: app.globalData.userInfo,
+          tempAvatarUrl: '',
+          tempNickName: ''
+        })
+        wx.showToast({ title: '登录成功', icon: 'success' })
+        this.loadMyPosts()
+      } else {
+        wx.showToast({ title: '登录失败，请重试', icon: 'none' })
+      }
+    })
+  },
+
+  // 退出登录
+  onLogout() {
+    wx.showModal({
+      title: '确认退出',
+      content: '退出后需要重新登录才能发布和收藏',
+      success: res => {
+        if (res.confirm) {
+          app.globalData.isLoggedIn = false
+          app.globalData.userInfo = null
+          this.setData({
+            isLoggedIn: false,
+            userInfo: null,
+            myPosts: [],
+            myFavorites: [],
+            tempAvatarUrl: '',
+            tempNickName: ''
+          })
+        }
+      }
+    })
   },
 
   // 切换标签
@@ -75,26 +168,28 @@ Page({
 
     this.setData({ loading: true })
 
-    wx.cloud.database().collection('favorites')
+    const db = wx.cloud.database()
+    const _ = db.command
+
+    db.collection('favorites')
       .where({ userId: openid })
       .orderBy('createTime', 'desc')
       .get()
       .then(res => {
         const favoriteIds = res.data.map(f => f.infoId)
-
         if (favoriteIds.length === 0) {
           this.setData({ myFavorites: [], loading: false })
           return
         }
 
-        // 查询收藏的信息详情
+        // 批量查询收藏的信息详情
         const batch = Math.ceil(favoriteIds.length / 10)
         let allItems = []
 
         for (let i = 0; i < batch; i++) {
           const ids = favoriteIds.slice(i * 10, (i + 1) * 10)
-          wx.cloud.database().collection('location_info')
-            .where(wx.cloud.database().command.in(ids))
+          db.collection('location_info')
+            .where({ _id: _.in(ids) })
             .get()
             .then(result => {
               allItems = [...allItems, ...(result.data || [])]
@@ -124,18 +219,7 @@ Page({
   // 打开高德导航
   goNavigate(e) {
     const { lat, lon, name } = e.currentTarget.dataset
-    const isIOS = wx.getSystemInfoSync().platform === 'ios'
-    const url = isIOS
-      ? `iosamap://navi?sourceApplication=miniprogram&poiname=${encodeURIComponent(name)}&lat=${lat}&lon=${lon}&dev=1`
-      : `androidamap://navi?sourceApplication=miniprogram&poiname=${encodeURIComponent(name)}&lat=${lat}&lon=${lon}&dev=1`
-
-    wx.navigateToMiniProgram({
-      appId: 'wx80fba4xxxx',
-      path: `pages/navi/index?lat=${lat}&lon=${lon}&name=${encodeURIComponent(name)}`,
-      fail: () => {
-        wx.openLocation({ latitude: lat, longitude: lon, name, scale: 15 })
-      }
-    })
+    wx.openLocation({ latitude: lat, longitude: lon, name: name || '', scale: 15 })
   },
 
   // 取消收藏
@@ -169,6 +253,13 @@ Page({
             })
         }
       }
+    })
+  },
+
+  // 进入我的消息
+  goMessages() {
+    wx.navigateTo({
+      url: '/pages/chatlist/chatlist'
     })
   },
 

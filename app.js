@@ -4,7 +4,8 @@
 App({
   globalData: {
     userInfo: null,
-    openid: null
+    openid: null,
+    isLoggedIn: false
   },
 
   onLaunch() {
@@ -29,6 +30,8 @@ App({
       success: res => {
         this.globalData.openid = res.result.openid
         console.log('openid:', this.globalData.openid)
+        // 登录成功后检查用户是否已注册
+        this.checkUserInfo()
       },
       fail: err => {
         console.error('获取 openid 失败', err)
@@ -36,31 +39,69 @@ App({
     })
   },
 
-  // 获取当前用户信息
-  getUserInfo(callback) {
-    wx.getSetting({
-      success: settingRes => {
-        if (settingRes.authSetting['scope.userInfo']) {
-          wx.getUserInfo({
-            success: res => {
-              this.globalData.userInfo = res.userInfo
-              callback && callback(res.userInfo)
-            }
-          })
-        } else {
-          // 未授权，尝试一键获取
-          wx.getUserProfile({
-            desc: '用于展示发布者信息',
-            success: res => {
-              this.globalData.userInfo = res.userInfo
-              callback && callback(res.userInfo)
-            },
-            fail: () => {
-              callback && callback(null)
-            }
-          })
-        }
+  // 检查用户是否已注册（从云数据库读取）
+  checkUserInfo() {
+    const openid = this.globalData.openid
+    if (!openid) return
+
+    const db = wx.cloud.database()
+    db.collection('users').where({
+      _openid: openid
+    }).get().then(res => {
+      if (res.data && res.data.length > 0) {
+        this.globalData.userInfo = res.data[0]
+        this.globalData.isLoggedIn = true
       }
+    }).catch(err => {
+      console.error('检查用户信息失败', err)
+    })
+  },
+
+  // 保存用户登录信息到云数据库
+  login(userInfo, callback) {
+    const openid = this.globalData.openid
+    if (!openid) {
+      callback && callback(false)
+      return
+    }
+
+    const db = wx.cloud.database()
+    const userData = {
+      nickName: userInfo.nickName,
+      avatarUrl: userInfo.avatarUrl,
+      updateTime: db.serverDate()
+    }
+
+    // 检查用户是否已存在
+    db.collection('users').where({
+      _openid: openid
+    }).get().then(res => {
+      if (res.data && res.data.length > 0) {
+        // 已存在，更新信息
+        db.collection('users').doc(res.data[0]._id).update({
+          data: userData
+        }).then(() => {
+          this.globalData.userInfo = { ...res.data[0], ...userData }
+          this.globalData.isLoggedIn = true
+          callback && callback(true)
+        }).catch(() => {
+          callback && callback(false)
+        })
+      } else {
+        // 新用户，创建记录
+        userData.createTime = db.serverDate()
+        db.collection('users').add({
+          data: userData
+        }).then(() => {
+          this.globalData.userInfo = userData
+          this.globalData.isLoggedIn = true
+          callback && callback(true)
+        }).catch(() => {
+          callback && callback(false)
+        })
+      }
+    }).catch(() => {
+      callback && callback(false)
     })
   }
 })

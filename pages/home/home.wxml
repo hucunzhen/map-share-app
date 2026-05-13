@@ -20,39 +20,13 @@
   <!-- 列表视图 -->
   <view wx:if="{{viewMode === 'list'}}">
     <view wx:if="{{listData.length > 0}}">
-      <view 
-        wx:for="{{listData}}" 
+      <location-card
+        wx:for="{{listData}}"
         wx:key="_id"
-        class="card info-card"
-        bindtap="goDetail"
-        data-id="{{item._id}}">
-        
-        <view class="card-header">
-          <text class="title">{{item.title}}</text>
-          <text class="tag" wx:if="{{item.images && item.images.length > 0}}">有图</text>
-        </view>
-        
-        <view class="description" wx:if="{{item.description}}">
-          {{item.description}}
-        </view>
-        
-        <view class="card-footer">
-          <view class="location">
-            <text class="icon">📍</text>
-            <text class="text">{{item.latitude.toFixed(4)}}, {{item.longitude.toFixed(4)}}</text>
-          </view>
-          <text class="time">{{item.createTime}}</text>
-        </view>
-
-        <!-- 底部按钮 -->
-        <view class="card-actions">
-          <view class="action-btn" catchtap="goNavigate" data-lat="{{item.latitude}}" data-lon="{{item.longitude}}" data-name="{{item.title}}">
-            <text class="icon">🧭</text>
-            <text>导航</text>
-          </view>
-        </view>
-
-      </view>
+        title="{{item.title}}"
+        address="{{item.description}}"
+        bind:tap="goDetail"
+        data-id="{{item._id}}" />
 
       <!-- 加载更多 -->
       <view class="loading" wx:if="{{loading}}">
