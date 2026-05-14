@@ -1,5 +1,28 @@
 /* pages/home/home.wxss */
 
+.route-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx 24rpx;
+  margin-bottom: 20rpx;
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+  border-radius: 16rpx;
+  color: #ffffff;
+}
+
+.route-entry-text {
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.route-entry-sub {
+  font-size: 22rpx;
+  opacity: 0.9;
+  margin-top: 6rpx;
+}
+
 .view-switch {
   display: flex;
   background: #ffffff;

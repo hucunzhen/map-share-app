@@ -1,6 +1,11 @@
 <!-- pages/home/home.wxml -->
 <view class="container">
 
+  <view class="route-entry" bindtap="goRoutePlan">
+    <text class="route-entry-text">路线规划</text>
+    <text class="route-entry-sub">连接 map-route-analyzer</text>
+  </view>
+
   <!-- 视图切换 -->
   <view class="view-switch">
     <view 

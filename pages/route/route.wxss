@@ -1,0 +1,97 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #f3f4f6;
+}
+
+.route-map {
+  width: 100%;
+  height: 52vh;
+  min-height: 360rpx;
+}
+
+.panel {
+  flex: 1;
+  padding: 24rpx 28rpx 48rpx;
+  box-sizing: border-box;
+}
+
+.hint {
+  font-size: 26rpx;
+  color: #374151;
+  margin-bottom: 20rpx;
+  line-height: 1.5;
+}
+
+.profile-row {
+  margin-bottom: 20rpx;
+}
+
+.profile-label {
+  display: block;
+  font-size: 26rpx;
+  color: #6b7280;
+  margin-bottom: 12rpx;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.chip {
+  padding: 12rpx 28rpx;
+  font-size: 26rpx;
+  color: #374151;
+  background: #fff;
+  border: 1rpx solid #e5e7eb;
+  border-radius: 999rpx;
+}
+
+.chip.active {
+  color: #fff;
+  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+  border-color: transparent;
+  font-weight: 600;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+  color: #fff;
+  border: none;
+  flex: 1;
+  min-width: 200rpx;
+}
+
+.btn.secondary {
+  background: #fff;
+  color: #3b82f6;
+  border: 1rpx solid #93c5fd;
+}
+
+.summary {
+  font-size: 28rpx;
+  color: #111827;
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 20rpx 24rpx;
+  margin-top: 8rpx;
+  line-height: 1.6;
+}
+
+.foot-note {
+  font-size: 22rpx;
+  color: #9ca3af;
+  margin-top: 24rpx;
+  line-height: 1.5;
+}

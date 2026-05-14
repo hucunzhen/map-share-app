@@ -100,6 +100,10 @@ Page({
     }
   },
 
+  goRoutePlan() {
+    wx.navigateTo({ url: '/pages/route/route' })
+  },
+
   // 切换视图模式
   switchView(e) {
     const mode = e.currentTarget.dataset.mode

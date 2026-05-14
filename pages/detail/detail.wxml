@@ -59,14 +59,20 @@
 
   <!-- 导航按钮 -->
   <view class="nav-section">
-    <button class="btn-amap" bindtap="openAmap">
-      <text class="icon">🧭</text>
-      <text>用高德地图导航</text>
+    <button class="btn-route" bindtap="goPlanRoute">
+      <text class="icon">📐</text>
+      <text>规划到此的路线</text>
     </button>
-    <button class="btn-map" bindtap="viewOnMap">
-      <text class="icon">🗺️</text>
-      <text>在地图上查看</text>
-    </button>
+    <view class="nav-row">
+      <button class="btn-amap" bindtap="openAmap">
+        <text class="icon">🧭</text>
+        <text>用高德地图导航</text>
+      </button>
+      <button class="btn-map" bindtap="viewOnMap">
+        <text class="icon">🗺️</text>
+        <text>在地图上查看</text>
+      </button>
+    </view>
   </view>
 
   <!-- 评论区域 -->

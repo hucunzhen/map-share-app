@@ -161,6 +161,18 @@ Page({
     })
   },
 
+  // 跳转路线规划（当前位置为起点，本页地点为终点）
+  goPlanRoute() {
+    const info = this.data.info
+    if (!info || info.latitude == null || info.longitude == null) {
+      wx.showToast({ title: '无有效坐标', icon: 'none' })
+      return
+    }
+    wx.navigateTo({
+      url: `/pages/route/route?toLat=${info.latitude}&toLng=${info.longitude}`
+    })
+  },
+
   // 跳转高德地图导航
   openAmap() {
     const { latitude, longitude, title, address } = this.data.info

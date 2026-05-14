@@ -5,7 +5,15 @@ App({
   globalData: {
     userInfo: null,
     openid: null,
-    isLoggedIn: false
+    isLoggedIn: false,
+    /** map-route-analyzer 根地址（无末尾 /），须与微信公众平台「request 合法域名」完全一致。
+     * 当前为 https + 非 443 端口，后台须添加整行： https://dieinvain.duckdns.org:18765
+     * 若只配置 https://dieinvain.duckdns.org（无端口），带 :18765 的请求会报 url not in domain list。
+     * 真机/体验版必须配置域名；开发者工具可配合 project.private.config.json 里 urlCheck:false 先联调。
+     */
+    mapRouteApiBase: 'https://dieinvain.duckdns.org:18765',
+    /** 可选；留空则路线服务使用其服务端环境变量中的高德 Key */
+    mapRouteAmapKey: ''
   },
 
   onLaunch() {

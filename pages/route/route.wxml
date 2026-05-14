@@ -1,0 +1,40 @@
+<!-- 对接 map-route-analyzer /api/route，地图红线为 path_lat_lng -->
+<view class="page">
+  <map
+    id="routeMap"
+    class="route-map"
+    latitude="{{latitude}}"
+    longitude="{{longitude}}"
+    scale="{{scale}}"
+    markers="{{markers}}"
+    polyline="{{polyline}}"
+    show-location
+    bindtap="onMapTap"
+  />
+
+  <view class="panel">
+    <view class="hint">{{pickHint}}</view>
+    <view class="profile-row">
+      <text class="profile-label">方式</text>
+      <view class="chips">
+        <view
+          wx:for="{{routeProfileOptions}}"
+          wx:key="value"
+          class="chip {{routeProfile === item.value ? 'active' : ''}}"
+          data-profile="{{item.value}}"
+          bindtap="onRouteProfileTap"
+        >{{item.label}}</view>
+      </view>
+    </view>
+    <view class="row">
+      <button class="btn secondary" size="mini" bindtap="onPickFrom">选起点</button>
+      <button class="btn secondary" size="mini" bindtap="onPickTo">选终点</button>
+      <button class="btn secondary" size="mini" bindtap="onClear">清空</button>
+    </view>
+    <view class="row">
+      <button class="btn primary" size="default" bindtap="onPlan" loading="{{planning}}">规划路线</button>
+    </view>
+    <view class="summary" wx:if="{{routeSummary}}">{{routeSummary}}</view>
+    <view class="foot-note">map-route-analyzer；app.js 中 mapRouteApiBase；微信公众平台 request 合法域名须与完整地址一致（若不支持带端口，请改用 443 再配置）。</view>
+  </view>
+</view>
